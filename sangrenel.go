@@ -55,7 +55,7 @@ func init() {
 	flag.IntVar(&Config.msgSize, "message-size", 300, "Message size (bytes)")
 	flag.Uint64Var(&Config.msgRate, "produce-rate", 100000000, "Global write rate limit (messages/sec)")
 	flag.IntVar(&Config.batchSize, "message-batch-size", 500, "Messages per batch")
-	flag.StringVar(&Config.compressionName, "compression", "none", "Message compression: none, gzip, snappy")
+	flag.StringVar(&Config.compressionName, "compression", "none", "Message compression: none, gzip, snappy, lz4")
 	flag.StringVar(&Config.requiredAcksName, "required-acks", "local", "RequiredAcks config: none, local, all")
 	flag.BoolVar(&Config.noop, "noop", false, "Test message generation performance (does not connect to Kafka)")
 	flag.IntVar(&Config.workers, "workers", 1, "Number of workers")
@@ -76,6 +76,8 @@ func init() {
 		Config.compression = sarama.CompressionSnappy
 	case "none":
 		Config.compression = sarama.CompressionNone
+        case "lz4":
+                Config.compression = sarama.CompressionLZ4
 	default:
 		fmt.Printf("Invalid compression option: %s\n", Config.compressionName)
 		os.Exit(1)
